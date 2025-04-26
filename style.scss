@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: 0;
+}
+
+// 1. Variáveis
+@import "partials/colors";
+
+// 2. Base
+@import "partials/base"; // reset, tipografia básica etc (se quiser criar)
+
+// 3. Componentes
+@import "partials/header";
+@import "partials/layout";
+
+body {
+    font-family: 'Sora', sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    background-color: $primary-normal;
+  }
+
+button{
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-family: 'Sora', sans-serif;
+    font-size: 1.2rem;
+    color: $white-normal;
+    transition: all 0.3s ease-in-out;
+}
+
+img, svg {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+a{
+    cursor: pointer;
+    text-decoration: none;
+}
