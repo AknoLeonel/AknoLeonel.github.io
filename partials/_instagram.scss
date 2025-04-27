@@ -1,0 +1,57 @@
+.instagram {
+  background-color: $primary-normal;
+  color: $white-normal;
+  text-align: center;
+  padding: 60px 14px;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: $white-normal;
+  }
+
+  .instagram-posts {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap; // <- importante para mobile!
+
+    a {
+      display: block;
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      border-radius: 8px;
+      transition: transform 0.3s;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+.instagram-posts a {
+  color: $white-normal; // Define a cor do texto como branco
+  text-decoration: none; // Remove sublinhado
+}
+
+.instagram-posts a img {
+  width: 100px; // Define largura fixa
+  height: 100px; // Define altura fixa
+  object-fit: cover; // Garante que a imagem seja cortada proporcionalmente
+}
+
+/* Responsividade opcional (exemplo se quiser deixar 80px no mobile) */
+@media screen and (max-width: 480px) {
+  .instagram-posts a {
+    width: 80px;
+    height: 80px;
+  }
+}

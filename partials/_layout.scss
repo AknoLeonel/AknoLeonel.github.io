@@ -1,14 +1,8 @@
-.container{
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 16px;
-}
-
-.bg-home{
+.bg-home {
     position: relative;
-}
-
-.bg-home:before{
+  }
+  
+  .bg-home::before {
     content: '';
     display: block;
     position: absolute;
@@ -17,77 +11,124 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(to bottom, rgba(6, 18, 30, 0.1), #06121e), url("../assets/background9.png");
+    background: linear-gradient(to bottom, rgba(6, 18, 30, 0.1), #06121e), url("../assets/images/background9.png") no-repeat center center;
     background-size: cover;
-    background-repeat: no-repeat;
     background-position: center top;
     opacity: 0.9;
-}
-
-.hero{
-    color: $white-normal;
-    min-height: 80vh;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 14px;
-
-    h1{
-        text-align: center;
-        line-height: 150%;
-        max-width: 940px;
-        font-size: 46px;
-    }
-
-    p{
-        text-align: center;
-        margin:14px 0;
-    }
-}
-
-.button-contact{
+  }
+  
+  .hero h1 {
+    font-family: 'Akira Expanded', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $accent;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    text-align: center;
+    margin-bottom: 1rem;
+    line-height: 120%;
+  }
+  
+  .hero p {
+    text-align: center;
+    margin: 14px 0;
+    font-size: 1.1rem;
+    max-width: 720px;
+  }
+  
+  .button-contact {
     padding: 14px 28px;
     color: $white-normal;
     background-color: $red-normal;
-    border: 0;
     font-size: 18px;
     font-weight: 600;
     margin: 14px 0;
-}
-
-.button-contact:hover{
-    animation: scaleButton 0.8s alternate infinite;
-}
-
-@keyframes scaleButton{
-    from{
-        transform: scale(1);
+    border: none;
+    border-radius: 4px;
+    transition: transform 0.3s;
+  
+    &:hover {
+      transform: scale(1.07);
     }
-    to{
-        transform: scale(1.07);
+  }
+  
+  .about {
+    background-color: $primary-normal;
+    overflow: hidden;
+    color: $white-normal;
+  }
+  
+  .about-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    padding: 34px 14px 64px 14px;
+  
+    img {
+      max-width: 500px;
+      width: 100%;
+      flex: 1;
     }
-}
-
-@media screen and (max-width: 768px){
-    .hero{
-        min-height: 60vh;
-
-        h1{
-            font-size: clamp(24px, 6vw, 46px);
-            padding: 0 14px;
-            width: 100%;
-        }
-
-        p{
-            font-size: 14px;
-        }
-    }
-}
-
-@media screen and (max-width: 480px){
-    .hero h1{
+  
+    .about-description {
+      flex: 1;
+  
+      h2 {
         font-size: 24px;
+        margin-bottom: 14px;
+      }
+  
+      p {
+        line-height: 150%;
+        margin-bottom: 14px;
+      }
     }
-}
+  }
+  
+  @media screen and (max-width: 768px) {
+    .about-content {
+      flex-direction: column;
+      text-align: center;
+  
+      img {
+        max-width: 300px;
+      }
+    }
+  }
+  
+  .instagram {
+    text-align: center;
+    margin-top: 4rem;
+  
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+  
+    .instagram-posts {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap; /* adicionado */
+  
+      a {
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        border-radius: 8px;
+        transition: transform 0.3s;
+  
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+  
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+  

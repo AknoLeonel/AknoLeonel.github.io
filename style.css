@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
@@ -5,23 +6,38 @@
   outline: 0;
 }
 
+@font-face {
+  font-family: "Akira Expend";
+  src: url("../assets/fonts/Akira-Expanded-Demo.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 header {
   width: 100%;
 }
 
 .header-content {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-i {
-  color: #FFF;
+  justify-content: center; /* Centraliza tudo */
+  padding: 20px 0;
 }
 
 .header-icons {
   display: flex;
-  gap: 14px;
+  gap: 12px;
+  position: absolute;
+  left: 40px; /* distância da borda esquerda */
+  top: 50%;
+  transform: translateY(-50%); /* centraliza verticalmente */
+}
+
+.header-icons i {
+  font-size: 28px; /* Ícones menores */
+  color: #FFF;
 }
 
 .header-icons a:hover i {
@@ -37,12 +53,27 @@ i {
     transform: translateY(-8px) scale(1.1);
   }
 }
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo img {
+  width: 200px; /* Logo maior */
+}
+
 .header-button {
+  position: absolute;
+  right: 40px; /* distância da borda direita */
+  top: 50%;
+  transform: translateY(-50%); /* centraliza verticalmente */
+  font-size: 18px;
+  padding: 6px 18px;
   border: 1px solid #FFF;
-  padding: 8px 24px;
-  border-radius: 4px;
   color: #FFF;
   background-color: transparent;
+  border-radius: 4px;
   transition: background-color 0.8s;
 }
 
@@ -51,36 +82,29 @@ i {
   background-color: #d34040;
 }
 
-.header-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 14px;
-}
-
 @media screen and (max-width: 768px) {
   .header-content {
-    width: 100%;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 20px 0;
   }
-  .header-content i {
-    margin-top: 16px;
-    font-size: 34px;
+  .header-icons {
+    position: static;
+    margin-top: 10px;
+    transform: none;
+    order: 1;
   }
   .header-logo img {
     width: 160px;
-    margin-top: 46px;
+    margin-top: 20px;
   }
   .header-button {
-    display: none;
+    display: none; /* Botão some no mobile */
   }
 }
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 8px;
+  padding: 0 16px;
 }
 
 .bg-home {
@@ -91,15 +115,15 @@ i {
   content: "";
   display: block;
   position: absolute;
-  background-image: linear-gradient(to bottom, rgba(6, 18, 30, 0.1), #06121e), url("../assets/gerador.png");
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
+  background: linear-gradient(to bottom, rgba(6, 18, 30, 0.1), #06121e), url("../assets/background9.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 50% 0;
+  background-position: center top;
   opacity: 0.9;
 }
 
@@ -112,12 +136,31 @@ i {
   justify-content: center;
   padding: 14px;
 }
+
 .hero h1 {
+  font-family: 'Akira Expanded', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
   text-align: center;
-  line-height: 150%;
-  max-width: 940px;
-  font-size: 46px;
+  margin-bottom: 1rem;
+  line-height: 120%;
+  animation: fadeInUp 1s ease-out;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 .hero p {
   text-align: center;
   margin: 14px 0;
@@ -150,7 +193,7 @@ i {
     min-height: 60vh;
   }
   .hero h1 {
-    font-size: 34px;
+    font-size: clamp(24px, 6vw, 46px);
     padding: 0 14px;
     width: 100%;
   }
@@ -161,6 +204,46 @@ i {
 @media screen and (max-width: 480px) {
   .hero h1 {
     font-size: 24px;
+  }
+}
+.about {
+  background-color: #06121e;
+  overflow: hidden;
+  color: #FFF;
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  padding: 34px 14px 64px 14px;
+}
+.about-content img {
+  max-width: 500px;
+  width: 100%;
+  flex: 1;
+}
+.about-content .about-description {
+  flex: 1;
+}
+
+.about-description h2 {
+  font-size: 24px;
+  margin-bottom: 14px;
+}
+.about-description p {
+  line-height: 150%;
+  margin-bottom: 14px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .about-content img {
+    max-width: 300px;
   }
 }
 body {

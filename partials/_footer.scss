@@ -1,0 +1,62 @@
+.footer {
+  background-color: $primary-dark; // Certifique-se de que $primary-dark está definido corretamente
+  color: $white-normal; // Define a cor do texto como branco
+  text-align: center; // Centraliza o conteúdo
+  padding: 40px 14px;
+
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-logo img {
+    width: 140px;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    a {
+      color: $white-normal;
+      font-size: 1rem;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $accent;
+      }
+    }
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 12px;
+
+    a {
+      color: $white-normal;
+      font-size: 24px;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $accent;
+      }
+    }
+  }
+
+  .footer-copy {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: $white-normal; // Garante que o texto do copyright seja branco
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
