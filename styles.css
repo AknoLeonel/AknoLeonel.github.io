@@ -615,6 +615,13 @@ nav{
     }
 }
 
+@media (width < 600px) {
+    .nav__logo img {
+      height: 40px;
+      width: auto;
+    }
+}
+
 .whatsapp-fixo {
     position: fixed;
     bottom: 20px;
