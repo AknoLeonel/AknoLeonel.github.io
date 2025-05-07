@@ -1,13 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+
 :root {
+    /* Cores para o modo escuro (padrão) */
     --primary-color: #0cb5c5;
     --secondary-color: #111111;
     --secondary-color-light: #232220;
     --text-light: #a3a3a3;
-    --white: #ffffff;
-    --black: #000000;
+    --text-color: #ffffff;
+    --background-color: #000000;
     --max-width: 1200px;
+}
+
+/* Modo claro */
+body.light-mode {
+    --secondary-color: #f5f5f5;
+    --secondary-color-light: #e0e0e0;
+    --text-light: #666666;
+    --text-color: #111111;
+    --background-color: #ffffff;
 }
 
 * {
@@ -696,13 +707,13 @@ nav{
 
 /* Adicione estas variáveis para o tema claro */
 :root {
-  --bg-color: #ffffff;
+  --bg-color: #1c1c1c;
   --text-color: #ffffff;
 }
 
 [data-theme="dark"] {
-  --bg-color: #191818;
-  --text-color: #ffffff;
+  --bg-color: #dfdfdf;
+  --text-color: #212121;
 }
 
 /* Atualize o body para usar as variáveis */
@@ -727,6 +738,7 @@ footer,
   color: var(--text-color);
 }
 
-.stats__content p{
+.stats__content,
+.subscribe__container .para a p{
     color: var(--bg-color);
 }

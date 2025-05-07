@@ -96,3 +96,4 @@ if (!savedTheme) {
   document.documentElement.setAttribute('data-theme', initialTheme);
   toggleIcons(initialTheme);
 }
+
