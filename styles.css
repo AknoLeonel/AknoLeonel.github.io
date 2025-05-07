@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-    --primary-color: #ff581f;
+    --primary-color: #0cb5c5;
     --secondary-color: #111111;
     --secondary-color-light: #232220;
     --text-light: #a3a3a3;
@@ -127,6 +127,25 @@ nav{
     color: var(--white);
 }
 
+.navbar{
+    background: transparent;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+  
+.nav-icons {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
 .nav__links{
     list-style: none;
     display: flex;
@@ -162,6 +181,11 @@ nav{
     font-size: 4rem;
     font-weight: 700;
     text-align: center;
+}
+
+.header__container h2{
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 .header__container .btn{
@@ -639,9 +663,66 @@ nav{
     z-index: 1000;
     transition: transform 0.3s ease;
     text-decoration: none;
-  }
+}
   
-  .whatsapp-fixo:hover {
+.whatsapp-fixo:hover {
     transform: scale(1.1);
     background-color: #1ebc57;
-  }
+}
+
+.theme-toggle {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background-color: #0a9399;
+}
+
+/* Adicione estas variáveis para o tema claro */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #191818;
+  --text-color: #ffffff;
+}
+
+/* Atualize o body para usar as variáveis */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Ajuste elementos específicos que usam cores fixas */
+.navbar,
+footer,
+.stats,
+.about,
+.blog,
+.customer {
+  background-color: var(--bg-color);
+}
+
+.link a,
+.nav__logo a,
+.footer__col h5 a {
+  color: var(--text-color);
+}
