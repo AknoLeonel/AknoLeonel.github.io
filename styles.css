@@ -726,3 +726,7 @@ footer,
 .footer__col h5 a {
   color: var(--text-color);
 }
+
+.stats__content p{
+    color: var(--bg-color);
+}
