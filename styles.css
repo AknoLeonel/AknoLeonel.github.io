@@ -742,3 +742,7 @@ footer,
 .subscribe__container .para a p{
     color: var(--bg-color);
 }
+
+.light-mode{
+    color: var(--text-color);
+}
