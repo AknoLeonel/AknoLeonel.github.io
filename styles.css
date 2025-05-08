@@ -587,7 +587,7 @@ nav{
         position: fixed;
         width: 100%;
         padding: 1rem;
-        background-color: var(--black);
+        background-color: rgba(41, 41, 41, 0.744);
         z-index: 99;
     }
 
@@ -601,7 +601,7 @@ nav{
         transform: scaleY(0);
         transform-origin: top;
         transition: 0.5s;
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: rgba(41, 41, 41, 0.744);
     }
 
     .nav__links .link a{
@@ -618,6 +618,14 @@ nav{
 
     .nav__menu__btn{
         display: block;
+        color: #fff;           /* Garante que o ícone fique branco */
+        z-index: 101;          /* Fica acima do fundo da navbar */
+        position: absolute;    /* Garante posicionamento sobre a navbar */
+        right: 1.5rem;
+        top: 1.2rem;
+        background: none;
+        border: none;
+        cursor: pointer;
     }
 
     .header__container h1{
@@ -730,7 +738,7 @@ body {
 /* Elementos que precisam de contraste invertido */
 .section__header,
 .section__subheader,
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 p{
   color: var(--text-color);
 }
 
@@ -747,7 +755,7 @@ a,
 .link a,
 .nav__logo a,
 .footer__col h5 a {
-  color: var(--text-color);
+  color: var(--white);
 }
 
 /* Botões */
@@ -777,12 +785,18 @@ a,
   background-color: var(--bg-color);
 }
 
-[data-theme="light"] .subscribe__container .section__subheader,
-[data-theme="light"] .subscribe__container .para,
 [data-theme="light"] .banner__content .section__header,
 [data-theme="light"] .banner__content .para,
 [data-theme="light"] .header__container h1,
 [data-theme="light"] .header__container h2,
-[data-theme="light"] .nav__links .link a {
+[data-theme="light"] .nav__links .link a p{
+  color: var(--white) !important;
+}
+
+.subscribe__container .section__subheader .banner__content,
+.subscribe__container .section__header,
+.subscribe__container .para,
+.subscribe__container p,
+.subscribe__container a {
   color: var(--white) !important;
 }
