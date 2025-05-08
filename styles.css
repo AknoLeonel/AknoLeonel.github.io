@@ -12,14 +12,6 @@
     --max-width: 1200px;
 }
 
-/* Modo claro */
-body.light-mode {
-    --secondary-color: #f5f5f5;
-    --secondary-color-light: #e0e0e0;
-    --text-light: #666666;
-    --text-color: #111111;
-    --background-color: #ffffff;
-}
 
 * {
     margin: 0;
@@ -702,47 +694,95 @@ nav{
 
 .theme-toggle:hover {
   transform: scale(1.1);
-  background-color: #0a9399;
+  background-color: #4836bd;
 }
 
-/* Adicione estas variáveis para o tema claro */
 :root {
   --bg-color: #1c1c1c;
   --text-color: #ffffff;
+  --primary-color: #0cb5c5;
+  --secondary-color: #111111;
+  --secondary-color-light: #232220;
+  --text-light: #a3a3a3;
+  --white: #fff;
+  --black: #000;
+  --max-width: 1200px;
 }
 
-[data-theme="dark"] {
+/* Tema claro */
+[data-theme="light"] {
   --bg-color: #dfdfdf;
   --text-color: #212121;
+  --primary-color: #0cb5c5;
+  --secondary-color: #ffffff;
+  --secondary-color-light: #f3f3f3;
+  --text-light: #555;
+  --white: #fff;
+  --black: #000;
 }
 
-/* Atualize o body para usar as variáveis */
+/* Use as variáveis corretamente */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
-/* Ajuste elementos específicos que usam cores fixas */
-.navbar,
-footer,
-.stats,
-.about,
-.blog,
-.customer {
-  background-color: var(--bg-color);
+/* Elementos que precisam de contraste invertido */
+.section__header,
+.section__subheader,
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
 }
 
+.para,
+p,
+.blog__card p,
+.footer__col p,
+.footer__links a {
+  color: var(--text-light);
+}
+
+/* Links principais */
+a,
 .link a,
 .nav__logo a,
 .footer__col h5 a {
   color: var(--text-color);
 }
 
-.stats__content,
-.subscribe__container .para a p{
-    color: var(--bg-color);
+/* Botões */
+.btn__primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+.btn__secondary {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
-.light-mode{
-    color: var(--text-color);
+/* Footer */
+
+.footer__bar {
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+}
+
+/* Corrija backgrounds das seções para usar as variáveis */
+.about,
+.stats,
+.blog,
+.customer {
+  background-color: var(--bg-color);
+}
+
+[data-theme="light"] .subscribe__container .section__subheader,
+[data-theme="light"] .subscribe__container .para,
+[data-theme="light"] .banner__content .section__header,
+[data-theme="light"] .banner__content .para,
+[data-theme="light"] .header__container h1,
+[data-theme="light"] .header__container h2,
+[data-theme="light"] .nav__links .link a {
+  color: var(--white) !important;
 }
