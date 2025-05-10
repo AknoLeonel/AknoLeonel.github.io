@@ -291,7 +291,7 @@ nav{
 }
 
 .stats__image img{
-    max-width: 400px;
+    max-width: 500px;
     margin: auto;
     border-radius: 5px;
 }
@@ -798,5 +798,21 @@ a,
 .subscribe__container .para,
 .subscribe__container p,
 .subscribe__container a {
+  color: var(--white) !important;
+}
+
+.banner__content .section__subheader {
+  color: var(--white) !important;
+}
+
+.footer__col h4,
+.footer__col h5,
+.footer__col h5 a,
+.footer__col p,
+.footer__links a{
+  color: var(--white) !important;
+}
+
+.header__container h2 {
   color: var(--white) !important;
 }
