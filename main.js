@@ -89,7 +89,6 @@ function toggleIcons(theme) {
   }
 }
 
-// Inicializar tema com base na preferência do sistema
 if (!savedTheme) {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const initialTheme = prefersDark ? 'dark' : 'light';
