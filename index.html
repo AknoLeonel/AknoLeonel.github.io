@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
-  <amp-analytics type="gtag" data-credentials="include"> <script type="application/json"> { "vars": { "gtag_id": "AW-16983101840", "config": { "AW-16983101840": { "groups": "default" } } }, "triggers": { } } </script> </amp-analytics>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16983101840"></script> 
-  <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-16983101840'); </script>
-  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Aluguel de Geradores em Brasília | TGeradores - Energia Sob Medida</title>
-  <meta name="description" content="Soluções em aluguel de geradores de energia em Brasília e DF. Energia para eventos, obras, indústrias e emergências. Atendimento 24h. Solicite seu orçamento na TGeradores.">
-  <meta name="keywords" content="aluguel de gerador, geradores brasilia, energia para eventos, gerador para obras, locação de gerador df, TGeradores, manutenção de geradores">
-  <meta name="author" content="TGeradores">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17648210471"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17648210471');
+  </script>
+
+  <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17648210471/ULNbCLGY5sobEKekqd9B',
+          'event_callback': callback
+      });
+      return false;
+    }
+  </script>
+  <title>Aluguel de Geradores em Brasília | TG Geradores - Energia Sob Medida</title>
+  <meta name="description" content="Soluções em aluguel de geradores de energia em Brasília e DF. A TG Geradores oferece energia para eventos, obras, indústrias e emergências. Atendimento 24h.">
+  <meta name="keywords" content="aluguel de gerador, TG Geradores, geradores brasilia, energia para eventos, gerador para obras, locação de gerador df, manutenção de geradores">
+  <meta name="author" content="TG Geradores">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://tgeradores.com.br" /> <meta property="og:type" content="website">
+  <link rel="canonical" href="https://tgeradores.com.br" /> 
+  
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://tgeradores.com.br/">
-  <meta property="og:title" content="TGeradores | Aluguel de Geradores em Brasília">
-  <meta property="og:description" content="Garanta energia confiável para seu evento ou obra. Locação, manutenção e instalação de geradores no DF.">
+  <meta property="og:title" content="TG Geradores | Aluguel de Energia em Brasília">
+  <meta property="og:description" content="Garanta energia confiável para seu evento ou obra com a TG Geradores. Locação, manutenção e instalação no DF.">
   <meta property="og:image" content="assets/tgeradoreslogo.png">
 
   <link rel="stylesheet" href="styles.css" />
@@ -30,7 +49,7 @@
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "TGeradores",
+    "name": "TG Geradores",
     "image": "assets/tgeradoreslogo.png",
     "telephone": "+55-61-99599-2494",
     "url": "https://tgeradores.com.br",
@@ -49,14 +68,18 @@
     <header>
       <nav>
         <div class="nav__logo"><a href="#" aria-label="Voltar ao topo">
-          <img src="assets/tgeradoreslogo.png" alt="Logo TGeradores - Aluguel de Energia" />
+          <img src="assets/tgeradoreslogo.png" alt="Logo TG Geradores" />
         </a></div>
         <ul class="nav__links" id="nav-links">
           <li class="link"><a href="#home">Início</a></li>
           <li class="link"><a href="#about">Sobre</a></li>
           <li class="link"><a href="#stats">Soluções</a></li>
           <li class="link"><a href="#subscribe">Newsletter</a></li>
-          <li class="link"><a href="https://wa.me/5561995992494">Contato: (61) 9 9599-2494</a></li>
+          <li class="link">
+            <a href="https://wa.me/5561995992494" onclick="return gtag_report_conversion('https://wa.me/5561995992494');">
+              Contato: (61) 9 9599-2494
+            </a>
+          </li>
         </ul>
 
         <div class="nav__menu__btn" id="menu-btn">
@@ -64,12 +87,12 @@
         </div>
       </nav>
       <div class="section__container header__container" id="home">
-        <h1>ENERGIA SOB MEDIDA PARA SEU NEGÓCIO</h1>
+        <h1>ENERGIA SOB MEDIDA COM A TG GERADORES</h1>
         <h2 class="para">
           Nosso compromisso é garantir <strong>energia sob medida</strong> para eventos, obras,
           empresas e qualquer necessidade onde a energia confiável faz toda a diferença em Brasília e região.
         </h2>
-        <button onclick="window.location.href='https://wa.me/5561995992494?text=Ol%C3%A1! Gostaria de um orçamento para gerador.'" class="btn btn__secondary">
+        <button onclick="return gtag_report_conversion('https://wa.me/5561995992494?text=Ol%C3%A1! Gostaria de um orçamento para gerador.')" class="btn btn__secondary">
           Solicite seu orçamento
           <span><i class="ri-arrow-right-double-line"></i></span>
         </button>
@@ -80,17 +103,17 @@
       <div class="section__container about__container">
         <div class="about__grid">
           <div class="about__content">
-            <p class="section__subheader">Nossas Soluções em Energia</p>
-            <h2 class="section__header">Geradores para Eventos, Obras e Empresas.</h2>
+            <p class="section__subheader">Nossas Soluções</p>
+            <h2 class="section__header">TG Geradores: Para Eventos, Obras e Empresas.</h2>
             <p class="para">
               Fornecemos soluções completas de <strong>gerador a diesel</strong>, assegurando autonomia 
-              energética em diversos contextos. Nossa expertise garante sistemas
+              energética em diversos contextos. A expertise da TG Geradores garante sistemas
               robustos, eficientes e adaptáveis, oferecendo uma fonte confiável de 
               energia elétrica para atender às necessidades específicas de cada cliente.
             </p>
             <br />
             <p class="para">
-              Garanta o fornecimento de energia para seus eventos. Asseguramos geração de energia e instalações elétricas confiáveis, proporcionando um ambiente seguro e em conformidade com suas necessidades.
+              Garanta o fornecimento de energia para seus eventos. Asseguramos geração de energia e instalações elétricas confiáveis, proporcionando um ambiente seguro.
             </p>
           </div>
           <div class="about__list">
@@ -117,7 +140,7 @@
           <p class="section__subheader">Equipamentos para Locação</p>
           <h2 class="section__header">Grupos Geradores Potentes</h2>
           <p class="para">
-            A TGeradores visa suprir as demandas energéticas dos clientes, sejam elas eventuais ou comerciais, oferecendo soluções confiáveis, eficientes e com segurança.
+            A TG Geradores visa suprir as demandas energéticas dos clientes, sejam elas eventuais ou comerciais, oferecendo soluções confiáveis, eficientes e com segurança.
           </p>
           <div class="stats__grid light-mode">
             <div class="stats__card">
@@ -144,8 +167,8 @@
           </div>
         </div>
         <div class="stats__image">
-          <img src="assets/sem-t-tulo-1-1-89.png" alt="Grupo gerador de energia industrial silenciado" />
-          <img src="assets/Geradores.png" alt="Frota de geradores para locação TGeradores" />
+          <img src="assets/sem-t-tulo-1-1-89.png" alt="Grupo gerador de energia industrial da TG Geradores" />
+          <img src="assets/Geradores.png" alt="Frota de geradores para locação TG Geradores" />
         </div>
       </div>
     </section>
@@ -158,10 +181,10 @@
             Assim são nossos geradores: da sua empresa ao seu evento, da sua obra à sua tranquilidade
           </h2>
           <p class="para">
-            Garanta o fornecimento de energia para seus eventos. Asseguramos geração de energia e instalações elétricas confiáveis, proporcionando um ambiente seguro e em conformidade com suas necessidades.
+            Garanta o fornecimento de energia para seus eventos com a TG Geradores. Asseguramos geração de energia e instalações elétricas confiáveis.
           </p>
           <div class="banner__btns">
-            <button onclick="window.location.href='https://wa.me/5561995992494?text=Ol%C3%A1! Vim pelo site.'" class="btn btn__primary">
+            <button onclick="return gtag_report_conversion('https://wa.me/5561995992494?text=Ol%C3%A1! Vim pelo site.')" class="btn btn__primary">
               Fale Conosco
               <span><i class="ri-arrow-right-double-line"></i></span>
             </button>
@@ -178,37 +201,37 @@
           <div class="blog__card">
             <img src="assets/background11.png" alt="Dica sobre gerador ideal para eventos"/>
             <div>
-              <span><i class="ri-user-line"></i> By TGeradores</span>
+              <span><i class="ri-user-line"></i> By TG Geradores</span>
               <span><i class="ri-time-line"></i> Jun 28, 2025</span>
               <span><i class="ri-thumb-up-line"></i> 28</span>
             </div>
             <h4>O gerador ideal para seu evento?</h4>
             <p>
-              Descubra os principais fatores que influenciam a escolha do gerador certo para garantir energia confiável em qualquer tipo de evento.
+              Descubra os principais fatores que influenciam a escolha do gerador certo para garantir energia confiável.
             </p>
           </div>
           <div class="blog__card">
             <img src="assets/background8.png" alt="Uso de geradores em obras e comércios"/>
             <div>
-              <span><i class="ri-user-line"></i> By TGeradores</span>
+              <span><i class="ri-user-line"></i> By TG Geradores</span>
               <span><i class="ri-time-line"></i> Jun 29, 2025</span>
               <span><i class="ri-thumb-up-line"></i> 30</span>
             </div>
             <h4>Geradores em obras e comércios?</h4>
             <p>
-              Conheça os principais usos de geradores em diversos setores e entenda como eles agregam segurança e continuidade ao seu negócio.
+              Conheça os principais usos de geradores em diversos setores e entenda como eles agregam segurança ao seu negócio.
             </p>
           </div>
           <div class="blog__card">
             <img src="assets/background10.png" alt="Manutenção de geradores de energia"/>
             <div>
-              <span><i class="ri-user-line"></i> By TGeradores</span>
+              <span><i class="ri-user-line"></i> By TG Geradores</span>
               <span><i class="ri-time-line"></i> Jun 30, 2025</span>
               <span><i class="ri-thumb-up-line"></i> 29</span>
             </div>
             <h4>Manter seu gerador em perfeito estado</h4>
             <p>
-              Veja os cuidados essenciais na manutenção preventiva e corretiva de geradores para garantir seu bom funcionamento e prolongar sua vida útil.
+              Veja os cuidados essenciais na manutenção preventiva e corretiva de geradores para garantir seu bom funcionamento.
             </p>
           </div>
         </div>
@@ -219,7 +242,7 @@
       <div class="section__container subscribe__container">
         <p class="section__subheader">Newsletter</p>
         <h2 class="section__header">
-          Assine nossa newsletter e receba as últimas novidades.
+          Assine nossa newsletter e receba as últimas novidades da TG Geradores.
         </h2>
         <form action="/">
           <input type="text" placeholder="Nome" aria-label="Seu nome" />
@@ -238,7 +261,7 @@
         <p class="section__subheader">Feedbacks</p>
         <h2 class="section__header">A confiança de quem já utilizou nossos serviços</h2>
         <p class="para">
-          Confira o que nossos clientes têm a dizer sobre a experiência com a TGeradores e entenda por que somos referência em soluções de energia.
+          Confira o que nossos clientes têm a dizer sobre a experiência com a TG Geradores e entenda por que somos referência em soluções de energia.
         </p>
         <div class="customer__review">
           <div class="swiper">
@@ -247,7 +270,7 @@
                 <div class="customer__review__card">
                   <span><i class="ri-double-quotes-r"></i></span>
                   <p>
-                    Contratamos a TGeradores para um evento de grande porte e ficamos impressionados com a qualidade e pontualidade do serviço. Recomendo sem hesitar!
+                    Contratamos a TG Geradores para um evento de grande porte e ficamos impressionados com a qualidade e pontualidade do serviço. Recomendo sem hesitar!
                   </p>
                   <div class="customer__review__details">
                     <img src="assets/background9.png" alt="Foto da cliente Fernanda Lopes">
@@ -262,7 +285,7 @@
                 <div class="customer__review__card">
                   <span><i class="ri-double-quotes-r"></i></span>
                   <p>
-                    Utilizei os serviços da TGeradores durante uma obra e o suporte técnico foi impecável. Energia confiável do início ao fim.
+                    Utilizei os serviços da TG Geradores durante uma obra e o suporte técnico foi impecável. Energia confiável do início ao fim.
                   </p>
                   <div class="customer__review__details">
                     <img src="assets/logotgeradoresbranca.svg" alt="Cliente Ricardo Almeida">
@@ -277,7 +300,7 @@
                 <div class="customer__review__card">
                   <span><i class="ri-double-quotes-r"></i></span>
                   <p>
-                    Excelente atendimento e equipamentos de ponta! A equipe nos passou total segurança durante a locação do gerador.
+                    Excelente atendimento e equipamentos de ponta! A equipe da TG Geradores nos passou total segurança durante a locação.
                   </p>
                   <div class="customer__review__details">
                     <img src="assets/logotgeradoresbranca.svg" alt="Cliente Juliana Meirelles">
@@ -299,10 +322,10 @@
       <div class="section__container footer__container">
         <div class="footer__col">
           <h5><a href="#" aria-label="Logo Rodapé">
-            <img src="assets/tgeradoreslogo.png" alt="TGeradores Logo" />
+            <img src="assets/tgeradoreslogo.png" alt="Logo TG Geradores" />
           </a></h5>
           <p>
-            A TGeradores oferece soluções completas em aluguel de geradores de energia com foco em segurança, eficiência e atendimento personalizado. Atendemos eventos, obras, empresas e mais!
+            A TG Geradores oferece soluções completas em aluguel de geradores de energia com foco em segurança, eficiência e atendimento personalizado.
           </p>
           <div class="footer__socials">
             <a href="https://www.instagram.com/tggeradores/" aria-label="Instagram"><i class="ri-instagram-fill"></i></a>
@@ -334,11 +357,11 @@
           </div>
       </div>
       <div class="footer__bar">
-        Copyright &copy; 2025 TGeradores. Todos os direitos reservados.
+        Copyright &copy; 2025 TG Geradores. Todos os direitos reservados.
       </div>
     </footer>
 
-    <a href="https://wa.me/5561995992494?text=Ol%C3%A1! Vim pelo site e gostaria de saber mais." class="whatsapp-fixo" target="_blank" aria-label="Fale conosco no WhatsApp">
+    <a href="https://wa.me/5561995992494?text=Ol%C3%A1! Vim pelo site e gostaria de saber mais." onclick="return gtag_report_conversion('https://wa.me/5561995992494?text=Ol%C3%A1! Vim pelo site e gostaria de saber mais.');" class="whatsapp-fixo" target="_blank" aria-label="Fale conosco no WhatsApp">
       <i class="ri-whatsapp-line"></i>
     </a>
 
