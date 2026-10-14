@@ -85,7 +85,8 @@ h1 span{display:block;font-weight:300;color:transparent;-webkit-text-stroke:1px 
 .btn.go{background:var(--cyan);color:var(--space);border-color:var(--cyan)}
 .btn:hover{border-color:var(--star)}
 .btn.go:hover{background:var(--star);border-color:var(--star)}
-.frame{position:relative;aspect-ratio:16/9;background:#fff}
+.frame{position:relative;aspect-ratio:16/9;max-height:calc(100vh - 190px);width:100%;background:#fff}
+.viewer{display:flex;flex-direction:column;max-height:calc(100vh - 48px)}
 .frame iframe{position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0}
 .frame .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--deep);color:var(--dust);font-size:15px}
 .viewer footer{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line);font-size:14px;color:var(--dust)}
@@ -95,7 +96,8 @@ h1 span{display:block;font-weight:300;color:transparent;-webkit-text-stroke:1px 
   .viewer{border-radius:18px 18px 0 0}
   .viewer header{flex-wrap:wrap}
   .viewer header .actions{margin-left:0;width:100%}
-  .frame{aspect-ratio:9/14}
+  .viewer{max-height:92vh}
+  .frame{aspect-ratio:auto;height:60vh;max-height:none}
   .frame iframe{width:300%;height:300%;transform:scale(.3333)}
 }
 
