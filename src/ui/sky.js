@@ -51,7 +51,10 @@ export function createSky(canvas, tip, { projects, categories, reducedMotion, on
       ctx.globalAlpha = (dim ? 0.05 : active === key ? 0.55 : 0.22) * easeOut(intro);
       ctx.lineWidth = 1;
       ctx.beginPath();
-      group.forEach((s, i) => (i ? ctx.lineTo(s.x, s.y) : ctx.moveTo(s.x, s.y)));
+      group.forEach((s, i) => {
+        if (i) ctx.lineTo(s.x, s.y);
+        else ctx.moveTo(s.x, s.y);
+      });
       ctx.stroke();
     }
 
