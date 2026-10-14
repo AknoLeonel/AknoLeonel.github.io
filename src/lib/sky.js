@@ -1,7 +1,7 @@
 /** Geometria do céu de estrelas: lógica pura, sem DOM. */
 
 /** Gerador pseudoaleatório determinístico (Park–Miller). */
-export function createRng(seed = 42) {
+function createRng(seed = 42) {
   let s = seed % 2147483647;
   if (s <= 0) s += 2147483646;
   return () => {
@@ -10,7 +10,7 @@ export function createRng(seed = 42) {
   };
 }
 
-export const MOBILE_BREAKPOINT = 700;
+const MOBILE_BREAKPOINT = 700;
 
 /**
  * Posiciona cada projeto como uma estrela em torno do centro da sua constelação.
