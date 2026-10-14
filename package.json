@@ -1,0 +1,21 @@
+{
+  "name": "aknoleonel-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Portfólio de Leonel Paiva. Site estático servido pelo GitHub Pages.",
+  "scripts": {
+    "serve": "python3 -m http.server 4173",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "arch": "depcruise src --config .dependency-cruiser.cjs",
+    "knip": "knip",
+    "check": "npm run lint && npm run arch && npm run knip"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "dependency-cruiser": "^17.0.0",
+    "knip": "^5.60.0"
+  }
+}
