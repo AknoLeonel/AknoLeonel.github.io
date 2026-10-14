@@ -12,91 +12,111 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="modulepreload" href="src/main.js">
 <style>
 :root{
-  --space:#070B1A;
-  --deep:#0E1430;
-  --nebula:#3A0CA3;
-  --cyan:#00F5FF;
-  --magenta:#FF00E4;
-  --star:#E8ECFF;
-  --dust:#8C93B8;
+  --space:#070B1A; --deep:#0E1430; --nebula:#3A0CA3;
+  --cyan:#00F5FF; --magenta:#FF00E4; --star:#E8ECFF; --dust:#8C93B8;
   --line:rgba(140,147,184,.18);
-  --c-auto:#00F5FF;
-  --c-saude:#7CFFB2;
-  --c-esporte:#FFC24B;
-  --c-negocios:#FF00E4;
-  --c-pessoal:#B69CFF;
+  /* motion: ver AGENTS.md §3 */
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-in:cubic-bezier(.4,0,1,1);
+  --dur-enter:420ms; --dur-exit:220ms; --dur-fast:140ms;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{background:var(--space);color:var(--star);font:400 17px/1.6 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+button,.btn{-webkit-tap-highlight-color:transparent}
+button:active,.btn:active{transform:scale(.97)}
 
-/* ---------- HERO: o céu ---------- */
+/* ---------- skeleton ---------- */
+.sk{position:relative;overflow:hidden;background:rgba(140,147,184,.12);border-radius:6px}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(232,236,255,.08),transparent);animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+
+/* ---------- entrada única da página ---------- */
+.intro{opacity:0;transform:translateY(8px);filter:blur(4px);
+  transition:opacity var(--dur-enter) var(--ease-out),transform var(--dur-enter) var(--ease-out),filter var(--dur-enter) var(--ease-out);
+  transition-delay:calc(var(--i,0) * 90ms + 150ms)}
+[data-ready] .intro{opacity:1;transform:none;filter:none}
+
+/* ---------- lazy reveal ao rolar ---------- */
+[data-reveal]{opacity:0;transform:translateY(8px);filter:blur(4px);
+  transition:opacity 480ms var(--ease-out),transform 480ms var(--ease-out),filter 480ms var(--ease-out)}
+[data-reveal="in"]{opacity:1;transform:none;filter:none}
+
+/* ---------- HERO ---------- */
 .sky{position:relative;height:100vh;min-height:620px;overflow:hidden;
   background:radial-gradient(ellipse 70% 55% at 72% 38%,rgba(58,12,163,.45),transparent 70%),
              radial-gradient(ellipse 40% 35% at 20% 80%,rgba(255,0,228,.10),transparent 70%),var(--space)}
 #sky{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
 .hero-text{position:absolute;left:0;right:0;bottom:9vh;pointer-events:none}
-.hero-text .wrap{pointer-events:none}
 h1{font:700 clamp(44px,8.4vw,112px)/.92 Unbounded,sans-serif;letter-spacing:-.035em;max-width:9ch}
 h1 span{display:block;font-weight:300;color:transparent;-webkit-text-stroke:1px var(--star)}
 .lede{margin-top:22px;max-width:44ch;color:var(--dust);font-size:clamp(16px,1.6vw,19px)}
 .lede b{color:var(--star);font-weight:500}
-.hint{position:absolute;top:28px;right:24px;font-size:14px;color:var(--dust);display:flex;gap:10px;align-items:center}
-.hint i{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2.4s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.3}}
-@media (prefers-reduced-motion:reduce){.hint i{animation:none}}
+.hint{position:absolute;top:28px;right:24px;font-size:14px;color:var(--dust)}
 .brand{position:absolute;top:24px;left:24px;font:500 15px Unbounded;letter-spacing:.02em}
 .brand a{text-decoration:none}
-
-/* legenda das constelações */
 .legend{position:absolute;right:24px;bottom:9vh;display:flex;flex-direction:column;gap:8px;font-size:14px}
-.legend button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;color:var(--dust);padding:4px 8px;border-radius:6px;transition:color .2s}
+.legend button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;color:var(--dust);padding:4px 8px;border-radius:6px;transition:color var(--dur-fast) var(--ease-out)}
 .legend button:hover,.legend button[aria-pressed=true]{color:var(--star)}
 .legend button::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
 .legend button:focus-visible{outline:2px solid var(--cyan)}
 @media (max-width:700px){.legend{display:none}.hint{left:24px;right:auto;top:64px}.hero-text{bottom:6vh}}
-
-/* tooltip de estrela */
 .tip{position:absolute;pointer-events:none;background:rgba(14,20,48,.92);border:1px solid var(--line);backdrop-filter:blur(6px);
-  padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.35;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s;max-width:240px;z-index:3}
+  padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.35;opacity:0;transform:translateY(4px);
+  transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out);max-width:240px;z-index:3}
 .tip.on{opacity:1;transform:none}
 .tip strong{display:block;font:500 15px Unbounded;margin-bottom:2px}
 .tip small{color:var(--dust)}
 
-/* ---------- painel de visualização ---------- */
+/* ---------- painel de prévia: entrada / saída ---------- */
 .panel{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:rgba(4,6,16,.72);backdrop-filter:blur(4px);
-  opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
-.panel.open{opacity:1;visibility:visible}
-.viewer{width:min(1040px,100%);background:var(--deep);border:1px solid var(--line);border-radius:18px;overflow:hidden;
-  transform:scale(.97);transition:transform .25s;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(0,245,255,.06)}
-.panel.open .viewer{transform:none}
+  opacity:0;transition:opacity var(--dur-exit) var(--ease-in)}
+.panel[data-state=open]{opacity:1;transition:opacity 240ms var(--ease-out)}
+.panel[hidden]{display:none}
+.viewer{display:flex;flex-direction:column;width:min(1040px,100%);max-height:calc(100vh - 48px);background:var(--deep);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(0,245,255,.06);
+  opacity:0;transform:translateY(-6px) scale(.99);filter:blur(4px);
+  transition:opacity var(--dur-exit) var(--ease-in),transform var(--dur-exit) var(--ease-in),filter var(--dur-exit) var(--ease-in)}
+.panel[data-state=open] .viewer{opacity:1;transform:none;filter:none;
+  transition:opacity var(--dur-enter) var(--ease-out),transform var(--dur-enter) var(--ease-out),filter var(--dur-enter) var(--ease-out)}
 .viewer header{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line)}
 .viewer header .dot{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);flex:none}
 .viewer h3{font:500 18px Unbounded}
 .viewer header p{color:var(--dust);font-size:14px}
 .viewer header .actions{margin-left:auto;display:flex;gap:8px;flex:none}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font:500 14px Manrope;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--star)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font:500 14px Manrope;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--star);
+  transition:background-color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),transform 100ms var(--ease-out)}
 .btn.go{background:var(--cyan);color:var(--space);border-color:var(--cyan)}
 .btn:hover{border-color:var(--star)}
 .btn.go:hover{background:var(--star);border-color:var(--star)}
-.frame{position:relative;aspect-ratio:16/9;max-height:calc(100vh - 190px);width:100%;background:#fff}
-.viewer{display:flex;flex-direction:column;max-height:calc(100vh - 48px)}
-.frame iframe{position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0}
-.frame .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--deep);color:var(--dust);font-size:15px}
+.progress{height:2px;background:transparent;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--c,var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform 200ms linear,opacity 300ms var(--ease-out) 200ms}
+.frame[data-state=ready] + .progress i,.viewer:has(.frame[data-state=ready]) .progress i{opacity:0}
+.frame{position:relative;aspect-ratio:16/9;max-height:calc(100vh - 200px);width:100%;background:var(--deep)}
+.frame-skeleton{position:absolute;inset:0;padding:28px;display:grid;grid-template-rows:auto auto 1fr;gap:16px;
+  transition:opacity 300ms var(--ease-out)}
+.frame-skeleton .sk:nth-child(1){height:28px;width:38%}
+.frame-skeleton .sk:nth-child(2){height:14px;width:62%}
+.frame-skeleton .sk:nth-child(3){border-radius:12px}
+.frame[data-state=ready] .frame-skeleton{opacity:0;pointer-events:none}
+.frame iframe{position:absolute;top:0;left:0;width:200%;height:200%;border:0;background:#fff;transform:scale(.5);transform-origin:0 0;
+  opacity:0;transition:opacity 360ms var(--ease-out)}
+.frame[data-state=ready] iframe{opacity:1}
+.frame-note{position:absolute;left:28px;right:28px;bottom:24px;color:var(--dust);font-size:15px}
 .viewer footer{display:flex;gap:10px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line);font-size:14px;color:var(--dust)}
 .viewer footer span{border:1px solid var(--line);border-radius:999px;padding:3px 12px}
 @media (max-width:640px){
   .panel{padding:0;align-items:end}
-  .viewer{border-radius:18px 18px 0 0}
+  .viewer{border-radius:18px 18px 0 0;max-height:92vh}
   .viewer header{flex-wrap:wrap}
   .viewer header .actions{margin-left:0;width:100%}
-  .viewer{max-height:92vh}
   .frame{aspect-ratio:auto;height:60vh;max-height:none}
   .frame iframe{width:300%;height:300%;transform:scale(.3333)}
 }
@@ -105,14 +125,18 @@ h1 span{display:block;font-weight:300;color:transparent;-webkit-text-stroke:1px 
 section{padding:120px 0}
 h2{font:700 clamp(30px,4.4vw,52px)/1.02 Unbounded;letter-spacing:-.025em;max-width:16ch}
 .sub{color:var(--dust);margin-top:16px;max-width:52ch}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:44px 0 20px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:44px 0 20px;min-height:40px}
 .filters button{all:unset;cursor:pointer;padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:15px;color:var(--dust);display:flex;gap:8px;align-items:center}
 .filters button[aria-pressed=true]{color:var(--space);background:var(--star);border-color:var(--star)}
 .filters button:focus-visible{outline:2px solid var(--cyan)}
 .filters em{font-style:normal;opacity:.6;font-size:13px}
 .catalog{list-style:none;border-top:1px solid var(--line)}
 .catalog li{border-bottom:1px solid var(--line)}
-.catalog button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:18px minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,.9fr) auto;gap:20px;align-items:center;padding:20px 8px;transition:background .2s}
+.catalog li.sk-row{display:grid;grid-template-columns:18px 1.3fr 1.6fr .9fr 80px;gap:20px;align-items:center;padding:24px 8px}
+.catalog li.sk-row .sk{height:14px}
+.catalog li.sk-row .sk:first-child{width:10px;height:10px;border-radius:50%}
+.catalog button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:18px minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,.9fr) auto;gap:20px;align-items:center;padding:20px 8px;
+  transition:background-color var(--dur-fast) var(--ease-out)}
 .catalog button:hover{background:rgba(232,236,255,.03)}
 .catalog button:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
 .catalog .dot{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
@@ -125,6 +149,8 @@ h2{font:700 clamp(30px,4.4vw,52px)/1.02 Unbounded;letter-spacing:-.025em;max-wid
   .catalog button{grid-template-columns:14px 1fr auto;gap:6px 14px}
   .catalog .what{grid-column:2/4;grid-row:2;font-size:15px}
   .catalog .stack{display:none}
+  .catalog li.sk-row{grid-template-columns:14px 1fr 60px}
+  .catalog li.sk-row .sk:nth-child(3),.catalog li.sk-row .sk:nth-child(4){display:none}
 }
 
 /* ---------- sobre ---------- */
@@ -143,45 +169,61 @@ h2{font:700 clamp(30px,4.4vw,52px)/1.02 Unbounded;letter-spacing:-.025em;max-wid
 @media (max-width:860px){.about{grid-template-columns:1fr;gap:40px}}
 
 /* ---------- contato ---------- */
-.contact{text-align:left;border-top:1px solid var(--line)}
+.contact{border-top:1px solid var(--line)}
 .contact h2{max-width:14ch}
 .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
-.links a{display:flex;align-items:center;gap:12px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;text-decoration:none;font-weight:500}
+.links a{display:flex;align-items:center;gap:12px;padding:16px 22px;border:1px solid var(--line);border-radius:14px;text-decoration:none;font-weight:500;
+  transition:border-color var(--dur-fast) var(--ease-out),transform 100ms var(--ease-out)}
 .links a:hover{border-color:var(--cyan)}
+.links a:active{transform:scale(.97)}
 .links svg{width:20px;height:20px}
 footer.site{padding:40px 0 60px;color:var(--dust);font-size:14px}
+
+/* ---------- reduced motion: sem movimento, só mudanças instantâneas ou fades curtos ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:0s!important;animation-iteration-count:1!important}
+  .intro,[data-reveal]{transform:none!important;filter:none!important;transition:opacity 120ms linear!important;transition-delay:0s!important}
+  .viewer,.panel[data-state=open] .viewer{transform:none!important;filter:none!important;transition:opacity 120ms linear!important}
+  .panel,.panel[data-state=open]{transition:opacity 120ms linear!important}
+  .tip,.progress i{transition:none!important}
+  button:active,.btn:active,.links a:active{transform:none}
+}
 </style>
 </head>
 <body>
 
 <header class="sky" aria-label="Constelação de projetos">
   <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="brand"><a href="#top" id="top">leonel.paiva</a></div>
-  <p class="hint"><i></i>Cada estrela é um site no ar. Clique para visitar.</p>
+  <div class="brand intro" style="--i:0"><a href="#top" id="top">leonel.paiva</a></div>
+  <p class="hint intro" style="--i:3">Cada estrela é um site no ar. Clique para visitar.</p>
   <div class="tip" id="tip" role="status"></div>
-
   <div class="hero-text">
     <div class="wrap">
-      <h1>Leonel <span>Paiva</span></h1>
-      <p class="lede">Faço sites para <b>negócios reais de Brasília e da Bahia</b> e estudo Ciência de Dados, com a Astrofísica no horizonte.</p>
+      <h1 class="intro" style="--i:1">Leonel <span>Paiva</span></h1>
+      <p class="lede intro" style="--i:2">Faço sites para <b>negócios reais de Brasília e da Bahia</b> e estudo Ciência de Dados, com a Astrofísica no horizonte.</p>
     </div>
   </div>
-
-  <nav class="legend" id="legend" aria-label="Filtrar constelações"></nav>
+  <nav class="legend intro" style="--i:4" id="legend" aria-label="Filtrar constelações"></nav>
 </header>
 
 <main>
   <section id="projetos">
-    <div class="wrap">
+    <div class="wrap" data-reveal>
       <h2>16 sites em produção</h2>
       <p class="sub">Todos publicados e em uso por clientes. Clique em um projeto para abrir uma prévia ao vivo sem sair daqui.</p>
       <div class="filters" id="filters" role="group" aria-label="Filtrar por área"></div>
-      <ul class="catalog" id="catalog"></ul>
+      <ul class="catalog" id="catalog" aria-busy="true" aria-label="Projetos">
+        <li class="sk-row" aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span></li>
+        <li class="sk-row" aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span></li>
+        <li class="sk-row" aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span></li>
+        <li class="sk-row" aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span><span class="sk"></span></li>
+      </ul>
     </div>
   </section>
 
   <section id="sobre">
-    <div class="wrap about">
+    <div class="wrap about" data-reveal>
       <div>
         <h2>Programando desde os 16</h2>
         <p>Tenho 21 anos, sou de <b>Brasília-DF</b> e curso <b>Ciência de Dados</b>. Construo sites rápidos e bem posicionados no Google para oficinas, clínicas, escritórios e associações, e uso Python e Machine Learning para entender dados.</p>
@@ -202,16 +244,16 @@ footer.site{padding:40px 0 60px;color:var(--dust);font-size:14px}
   </section>
 
   <section id="contato" class="contact">
-    <div class="wrap">
+    <div class="wrap" data-reveal>
       <h2>Precisa de um site?</h2>
       <p class="sub">Me chama no Instagram e conta sobre o seu negócio.</p>
       <div class="links">
         <a href="https://www.instagram.com/muvageof" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
           @muvageof
         </a>
         <a href="https://github.com/AknoLeonel" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
           AknoLeonel
         </a>
       </div>
@@ -221,229 +263,25 @@ footer.site{padding:40px 0 60px;color:var(--dust);font-size:14px}
 
 <footer class="site"><div class="wrap">Leonel Paiva · Brasília-DF</div></footer>
 
-<div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pv-name">
+<div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pv-name" data-state="closed" hidden>
   <div class="viewer">
     <header>
-      <span class="dot" id="pv-dot"></span>
-      <div><h3 id="pv-name"></h3><p id="pv-what"></p></div>
+      <span class="dot"></span>
+      <div><h3 id="pv-name" data-name></h3><p data-what></p></div>
       <div class="actions">
-        <a class="btn go" id="pv-go" target="_blank" rel="noopener">Abrir site</a>
-        <button class="btn" id="pv-close" type="button">Fechar</button>
+        <a class="btn go" data-go target="_blank" rel="noopener">Abrir site</a>
+        <button class="btn" type="button" data-close>Fechar</button>
       </div>
     </header>
-    <div class="frame"><div class="loading" id="pv-loading">Carregando prévia…</div><iframe id="pv-frame" title="Prévia do site" loading="lazy"></iframe></div>
-    <footer id="pv-meta"></footer>
+    <div class="progress" aria-hidden="true"><i></i></div>
+    <div class="frame" data-state="loading">
+      <div class="frame-skeleton" aria-hidden="true"><span class="sk"></span><span class="sk"></span><span class="sk"></span></div>
+      <p class="frame-note" role="status"></p>
+    </div>
+    <footer data-meta></footer>
   </div>
 </div>
 
-<script>
-const CATS = {
-  auto:     {label:'Automotivo',            color:'#00F5FF'},
-  saude:    {label:'Saúde e bem-estar',     color:'#7CFFB2'},
-  esporte:  {label:'Esporte e eventos',     color:'#FFC24B'},
-  negocios: {label:'Negócios',              color:'#FF00E4'},
-  pessoal:  {label:'Projetos pessoais',     color:'#B69CFF'}
-};
-const PROJECTS = [
-  {name:'AM Auto Center',       what:'Mecânica em Formosa do Rio Preto - BA',           stack:'TypeScript',      cat:'auto',     url:'https://am-auto-center.vercel.app'},
-  {name:'Auto Socorro DF',      what:'Guincho 24h em Brasília',                         stack:'Astro',           cat:'auto',     url:'https://autosocorrodf.vercel.app'},
-  {name:'Guincho Brasília',     what:'Auto socorro 24h no DF',                          stack:'Astro',           cat:'auto',     url:'https://guincho-brasilia.vercel.app'},
-  {name:'Oficina Guará',        what:'Especialista em 4x4 e pick-ups',                  stack:'JavaScript',      cat:'auto',     url:'https://oficina-guara.vercel.app'},
-  {name:'Instituto Bodylife',   what:'Saúde integrada no Guará-DF',                     stack:'React, TypeScript', cat:'saude',  url:'https://instituto-bodylife-react.vercel.app'},
-  {name:'Reviva Saúde',         what:'Clínica de estética em Vicente Pires-DF',                     stack:'TypeScript',      cat:'saude',    url:'https://reviva-saude.vercel.app'},
-  {name:'ABLF',                 what:'Associação Brasileira de Ligas de Futsal',        stack:'JavaScript',      cat:'esporte',  url:'https://ablf-2025.vercel.app'},
-  {name:'Nova Geração Futsal',  what:'Futsal de base em Brasília',                                stack:'JavaScript',      cat:'esporte',  url:'https://nova-geracao-futsal.vercel.app'},
-  {name:'Monumental',           what:'Palco, LED e som para eventos',                         stack:'TypeScript',      cat:'esporte',  url:'https://monumental-site.vercel.app'},
-  {name:'PipiEasy',             what:'Aluguel de banheiro químico em Brasília',         stack:'HTML, CSS',       cat:'esporte',  url:'https://banheiros-pipi-easy.vercel.app'},
-  {name:'REALIZA Agro',         what:'Venda de fazendas e regularização fundiária',     stack:'TypeScript',      cat:'negocios', url:'https://lp-fazendas-tau.vercel.app'},
-  {name:'AD Veras Advocacia',   what:'Escritório tributário, trabalhista e previdenciário', stack:'JavaScript',  cat:'negocios', url:'https://ad-veras.vercel.app'},
-  {name:'Mi Impressoras',       what:'Manutenção de impressoras',                             stack:'JavaScript',      cat:'negocios', url:'https://impressoras-web.vercel.app'},
-  {name:'AHMDF Missionários',   what:'Projeto social de esporte no DF',                              stack:'TypeScript',      cat:'negocios', url:'https://site-missionarios.vercel.app'},
-  {name:'Vanguarda Kids',       what:'Aluguel de brinquedos em Formosa do Rio Preto-BA',                              stack:'JavaScript',      cat:'negocios', url:'https://brinquedos-theta.vercel.app'},
-  {name:'Tabela Periódica JS',  what:'Tabela periódica interativa',                     stack:'JavaScript',      cat:'pessoal',  url:'https://tabelajs.vercel.app'}
-];
-
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let activeCat = null;
-
-/* ---------- painel ---------- */
-const panel = document.getElementById('panel');
-const frame = document.getElementById('pv-frame');
-const loading = document.getElementById('pv-loading');
-let lastFocus = null;
-function openProject(p){
-  lastFocus = document.activeElement;
-  const c = CATS[p.cat].color;
-  document.getElementById('pv-dot').style.setProperty('--c', c);
-  document.getElementById('pv-name').textContent = p.name;
-  document.getElementById('pv-what').textContent = p.what;
-  document.getElementById('pv-go').href = p.url;
-  document.getElementById('pv-meta').innerHTML =
-    `<span>${CATS[p.cat].label}</span><span>${p.stack}</span><span>${p.url.replace('https://','')}</span>`;
-  loading.style.display = 'grid';
-  loading.textContent = 'Carregando prévia…';
-  frame.src = p.url;
-  clearTimeout(openProject.t);
-  openProject.t = setTimeout(() => {
-    if (loading.style.display !== 'none') loading.textContent = 'A prévia está demorando. Use “Abrir site” para ver em uma nova aba.';
-  }, 9000);
-  panel.classList.add('open');
-  document.getElementById('pv-close').focus();
-}
-frame.addEventListener('load', () => { if (frame.src) loading.style.display = 'none'; });
-function closePanel(){
-  panel.classList.remove('open');
-  setTimeout(() => { frame.removeAttribute('src'); }, 250);
-  if (lastFocus) lastFocus.focus();
-}
-document.getElementById('pv-close').onclick = closePanel;
-panel.addEventListener('click', e => { if (e.target === panel) closePanel(); });
-addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) closePanel(); });
-
-/* ---------- filtros e catálogo ---------- */
-const catalog = document.getElementById('catalog');
-PROJECTS.forEach((p, i) => {
-  const li = document.createElement('li');
-  li.dataset.cat = p.cat;
-  li.innerHTML = `<button type="button" style="--c:${CATS[p.cat].color}">
-    <span class="dot"></span><span class="name">${p.name}</span><span class="what">${p.what}</span>
-    <span class="stack">${p.stack}</span><span class="view">Ver prévia</span></button>`;
-  li.querySelector('button').onclick = () => openProject(p);
-  catalog.appendChild(li);
-});
-
-const filters = document.getElementById('filters');
-const legend = document.getElementById('legend');
-function setCat(cat){
-  activeCat = cat;
-  filters.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.cat || null) === cat)));
-  legend.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
-  catalog.querySelectorAll('li').forEach(li => li.hidden = !!cat && li.dataset.cat !== cat);
-}
-const all = document.createElement('button');
-all.type = 'button'; all.textContent = 'Todos'; all.setAttribute('aria-pressed','true');
-all.onclick = () => setCat(null);
-filters.appendChild(all);
-Object.entries(CATS).forEach(([k, v]) => {
-  const n = PROJECTS.filter(p => p.cat === k).length;
-  const b = document.createElement('button');
-  b.type = 'button'; b.dataset.cat = k; b.setAttribute('aria-pressed','false');
-  b.innerHTML = `${v.label} <em>${n}</em>`;
-  b.onclick = () => setCat(activeCat === k ? null : k);
-  filters.appendChild(b);
-  const l = document.createElement('button');
-  l.type = 'button'; l.dataset.cat = k; l.style.setProperty('--c', v.color);
-  l.setAttribute('aria-pressed','false'); l.textContent = v.label;
-  l.onclick = () => setCat(activeCat === k ? null : k);
-  legend.appendChild(l);
-});
-
-/* ---------- céu ---------- */
-const cv = document.getElementById('sky');
-const ctx = cv.getContext('2d');
-const tip = document.getElementById('tip');
-let W, H, DPR, dust = [], stars = [], hover = null, t0 = performance.now();
-
-// centro de cada constelação (proporção da tela)
-const CENTERS = {auto:[.62,.22], saude:[.86,.30], esporte:[.70,.50], negocios:[.42,.30], pessoal:[.88,.62]};
-function rand(seed){ let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
-
-function layout(){
-  DPR = Math.min(devicePixelRatio || 1, 2);
-  W = cv.clientWidth; H = cv.clientHeight;
-  cv.width = W * DPR; cv.height = H * DPR;
-  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  const r = rand(42);
-  dust = Array.from({length: Math.round(W * H / 2600)}, () => ({x:r()*W, y:r()*H, s:r()*1.2+.2, a:r()*.6+.15, p:r()*6.28}));
-  const mobile = W < 700;
-  const spread = mobile ? .16 : .085;
-  const counters = {};
-  stars = PROJECTS.map((p, i) => {
-    const c = CENTERS[p.cat];
-    const k = counters[p.cat] = (counters[p.cat] || 0) + 1;
-    const ang = (k * 2.4) + i;
-    const rad = spread * (0.45 + (k % 3) * 0.35);
-    let cx = mobile ? c[0] * .8 + .1 : c[0];
-    let cy = mobile ? c[1] * .78 + .1 : c[1];
-    return {p, x:(cx + Math.cos(ang) * rad) * W, y:(cy + Math.sin(ang) * rad * (W/H) * .9) * H, r:4 + (p.cat==='pessoal'?1:0), phase:i};
-  });
-}
-
-function draw(now){
-  const t = (now - t0) / 1000;
-  ctx.clearRect(0, 0, W, H);
-  // poeira estelar
-  for (const d of dust){
-    const a = reduce ? d.a : d.a * (.65 + .35 * Math.sin(t * 1.3 + d.p));
-    ctx.fillStyle = `rgba(232,236,255,${a})`;
-    ctx.fillRect(d.x, d.y, d.s, d.s);
-  }
-  // linhas das constelações
-  Object.keys(CATS).forEach(k => {
-    const s = stars.filter(st => st.p.cat === k);
-    const dim = activeCat && activeCat !== k;
-    ctx.strokeStyle = CATS[k].color;
-    ctx.globalAlpha = dim ? .05 : (activeCat === k ? .55 : .22);
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    s.forEach((st, i) => i ? ctx.lineTo(st.x, st.y) : ctx.moveTo(st.x, st.y));
-    ctx.stroke();
-  });
-  ctx.globalAlpha = 1;
-  // estrelas-projeto
-  for (const st of stars){
-    const col = CATS[st.p.cat].color;
-    const dim = activeCat && activeCat !== st.p.cat;
-    const isH = hover === st;
-    const tw = reduce ? 1 : .85 + .15 * Math.sin(t * 2 + st.phase);
-    const R = (isH ? st.r * 1.8 : st.r) * tw;
-    ctx.globalAlpha = dim ? .18 : 1;
-    const g = ctx.createRadialGradient(st.x, st.y, 0, st.x, st.y, R * 6);
-    g.addColorStop(0, col + 'AA'); g.addColorStop(1, col + '00');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(st.x, st.y, R * 6, 0, 6.29); ctx.fill();
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(st.x, st.y, R * .55, 0, 6.29); ctx.fill();
-    if (isH){
-      ctx.strokeStyle = col; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(st.x, st.y, R * 2.6, 0, 6.29); ctx.stroke();
-    }
-  }
-  ctx.globalAlpha = 1;
-  if (!reduce) requestAnimationFrame(draw);
-}
-
-function pick(mx, my){
-  let best = null, bd = 26;
-  for (const st of stars){
-    if (activeCat && activeCat !== st.p.cat) continue;
-    const d = Math.hypot(st.x - mx, st.y - my);
-    if (d < bd){ bd = d; best = st; }
-  }
-  return best;
-}
-function showTip(st){
-  if (!st){ tip.classList.remove('on'); return; }
-  tip.innerHTML = `<strong>${st.p.name}</strong>${st.p.what}<br><small>${CATS[st.p.cat].label} · clique para ver</small>`;
-  const x = Math.min(st.x + 18, W - 260), y = Math.max(st.y - 70, 60);
-  tip.style.left = x + 'px'; tip.style.top = y + 'px';
-  tip.classList.add('on');
-}
-cv.addEventListener('mousemove', e => {
-  const r = cv.getBoundingClientRect();
-  const st = pick(e.clientX - r.left, e.clientY - r.top);
-  if (st !== hover){ hover = st; showTip(st); cv.style.cursor = st ? 'pointer' : 'crosshair'; if (reduce) draw(performance.now()); }
-});
-cv.addEventListener('mouseleave', () => { hover = null; showTip(null); if (reduce) draw(performance.now()); });
-cv.addEventListener('click', e => {
-  const r = cv.getBoundingClientRect();
-  const st = pick(e.clientX - r.left, e.clientY - r.top);
-  if (st) openProject(st.p);
-});
-
-addEventListener('resize', () => { layout(); if (reduce) draw(performance.now()); });
-layout();
-requestAnimationFrame(draw);
-// o filtro do céu também redesenha no modo sem animação
-[filters, legend].forEach(el => el.addEventListener('click', () => { if (reduce) requestAnimationFrame(draw); }));
-</script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
