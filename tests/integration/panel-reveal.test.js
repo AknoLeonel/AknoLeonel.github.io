@@ -59,6 +59,8 @@ describe('painel de prévia', () => {
     const iframe = root.querySelector('iframe');
     expect(iframe.getAttribute('src')).toBe(project.url);
     expect(iframe.title).toContain(project.name);
+    expect(iframe.getAttribute('sandbox')).not.toMatch(/allow-top-navigation/);
+    expect(iframe.getAttribute('sandbox')).toContain('allow-scripts');
     expect(root.querySelector('.frame').dataset.state).toBe('loading');
     expect(document.activeElement).toBe(root.querySelector('[data-close]'));
     expect(onOpen).toHaveBeenCalledWith(project);
@@ -101,11 +103,12 @@ describe('painel de prévia', () => {
     expect(root.querySelector('iframe')).toBeNull();
   });
 
-  it('fecha com Esc e ao clicar fora', () => {
+  it('Esc fecha na hora, sem animação; clicar fora fecha com saída animada', () => {
     panel.open(project);
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(root.dataset.state).toBe('closing');
-    vi.advanceTimersByTime(300);
+    expect(root.dataset.state).toBe('closed');
+    expect(root.hidden).toBe(true);
+    expect(root.querySelector('iframe')).toBeNull();
     panel.open(project);
     root.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(root.dataset.state).toBe('closing');

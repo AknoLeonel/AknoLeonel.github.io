@@ -63,6 +63,8 @@ export function createPanel(root, { onOpen, onLoaded } = {}) {
     iframe.title = `Prévia do site ${project.name}`;
     iframe.loading = 'lazy';
     iframe.referrerPolicy = 'no-referrer';
+    // o site externo não pode navegar a página principal nem abrir popups sem ação do usuário
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
     openedAt = performance.now();
     iframe.addEventListener('load', () => {
       stopProgress();
@@ -82,26 +84,34 @@ export function createPanel(root, { onOpen, onLoaded } = {}) {
     onOpen?.(project);
   }
 
-  function close() {
+  function finishClose() {
+    root.dataset.state = 'closed';
+    root.hidden = true;
+    iframe?.remove();
+    iframe = null;
+  }
+
+  /** `instant` fecha sem animação (ações de teclado nunca animam). */
+  function close({ instant = false } = {}) {
     if (root.dataset.state !== 'open') return;
     stopProgress();
-    root.dataset.state = 'closing';
-    setTimeout(() => {
-      if (root.dataset.state !== 'closing') return;
-      root.dataset.state = 'closed';
-      root.hidden = true;
-      iframe?.remove();
-      iframe = null;
-    }, EXIT_MS);
+    if (instant) {
+      finishClose();
+    } else {
+      root.dataset.state = 'closing';
+      setTimeout(() => {
+        if (root.dataset.state === 'closing') finishClose();
+      }, EXIT_MS);
+    }
     lastFocus?.focus?.({ preventScroll: true });
   }
 
-  closeBtn.addEventListener('click', close);
+  closeBtn.addEventListener('click', () => close());
   root.addEventListener('click', (e) => {
     if (e.target === root) close();
   });
   root.ownerDocument.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') close({ instant: true });
   });
 
   return { open, close, isOpen: () => root.dataset.state === 'open' };

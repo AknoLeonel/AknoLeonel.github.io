@@ -81,6 +81,15 @@ test('as seções entram ao rolar (lazy reveal)', async ({ page }) => {
   await expect(contato).toHaveCSS('opacity', '1');
 });
 
+test.describe('sem JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+
+  test('título e seções continuam visíveis', async ({ page }) => {
+    await expect(page.locator('h1')).toHaveCSS('opacity', '1');
+    await expect(page.locator('#contato [data-reveal]')).toHaveCSS('opacity', '1');
+  });
+});
+
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
