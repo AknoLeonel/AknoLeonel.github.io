@@ -142,7 +142,12 @@ describe('observabilidade', () => {
     const lcp = observers.find((o) => o.type === 'largest-contentful-paint');
     const cls = observers.find((o) => o.type === 'layout-shift');
     lcp.cb({ getEntries: () => [{ startTime: 900 }, { startTime: 1234 }] });
-    cls.cb({ getEntries: () => [{ value: 0.05, hadRecentInput: false }, { value: 0.5, hadRecentInput: true }] });
+    cls.cb({
+      getEntries: () => [
+        { value: 0.05, hadRecentInput: false },
+        { value: 0.5, hadRecentInput: true },
+      ],
+    });
     Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
     document.dispatchEvent(new Event('visibilitychange'));
     const span = sentSpans(fetch).find((s) => s.name === 'web_vitals');
