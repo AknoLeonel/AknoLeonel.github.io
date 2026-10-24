@@ -23,8 +23,11 @@
     h.classList.add('boot');
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   }
-  // rede de segurança: se algum script falhar, o conteúdo aparece mesmo assim
-  setTimeout(function(){ h.classList.remove('boot'); h.classList.add('ready'); }, 9000);
+  // rede de segurança: se o script principal não chegar ao fim, o conteúdo aparece mesmo assim
+  window.lpSafety = setTimeout(function(){
+    h.classList.remove('boot'); h.classList.add('ready');
+    if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
+  }, 9000);
 })();
 </script>
 <style>
@@ -435,10 +438,12 @@ const $ = s => document.querySelector(s);
 const html = document.documentElement;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(pointer: fine)').matches;
-const G = window.gsap;                       // sem GSAP o site funciona, só sem animação
+// sem GSAP (ou sem algum plugin) o site funciona, só sem animação
+const G = window.gsap && window.ScrollTrigger && window.SplitText && window.ScrambleTextPlugin ? window.gsap : null;
+const restoreScroll = () => { if ('scrollRestoration' in history) history.scrollRestoration = 'auto'; };
 const animate = !!G && !reduce;
 const booting = html.classList.contains('boot') && !!G;
-if (!G) html.classList.remove('boot');
+if (!booting){ html.classList.remove('boot'); restoreScroll(); }
 if (G) gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
 const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch(e){ return null; } };
 let activeCat = null;
@@ -484,6 +489,7 @@ function openProject(p){
   $('#pv-meta').innerHTML = `<span>${CATS[p.cat].label}</span><span>${p.stack}</span><span>${p.url.replace('https://','')}</span>`;
   loading.style.display = 'grid';
   loading.textContent = `GET ${p.url.replace('https://','')} …`;
+  clearTimeout(closePanel.t);
   frame.src = p.url;
   clearTimeout(openProject.t);
   openProject.t = setTimeout(() => {
@@ -496,7 +502,7 @@ function openProject(p){
 frame.addEventListener('load', () => { if (frame.src) loading.style.display = 'none'; });
 function closePanel(){
   panel.classList.remove('open');
-  setTimeout(() => { frame.removeAttribute('src'); }, 250);
+  closePanel.t = setTimeout(() => { frame.removeAttribute('src'); }, 250);
   if (lastFocus) lastFocus.focus();
 }
 $('#pv-close').onclick = closePanel;
@@ -521,13 +527,13 @@ function buildRow(li){
   const b = li.querySelector('button'), nm = li.querySelector('.nm'), scan = b.querySelector('.scan');
   gsap.timeline()
     .fromTo(scan, {scaleX:0, transformOrigin:'0 50%'}, {scaleX:1, duration:.35, ease:'power2.in'})
-    .set(b.querySelectorAll(':scope > span'), {autoAlpha:1})
+    .set(b.querySelectorAll(':scope > span'), {opacity:1})
     .set(scan, {transformOrigin:'100% 50%'})
     .to(scan, {scaleX:0, duration:.45, ease:'power2.out'})
     .to(nm, {duration:.7, scrambleText:{text:nm.textContent, chars:'upperAndLowerCase', speed:.6}}, '<')
     .from(b.querySelectorAll('.what, .stack, .view'), {x:-10, duration:.5, stagger:.05, ease:'power2.out'}, '<');
 }
-function showRow(li){ if (li._built) return; li._built = true; gsap.set(li.querySelectorAll('button > span'), {autoAlpha:1}); }
+function showRow(li){ if (li._built) return; li._built = true; gsap.set(li.querySelectorAll('button > span'), {opacity:1}); }
 
 const filters = $('#filters'), legend = $('#legend');
 function setCat(cat){
@@ -719,18 +725,21 @@ function setStage(s){
   if (animate) gsap.to('#hud-name', {duration:.5, scrambleText:{text:s.name, chars:'lowerCase', speed:.6}});
   else $('#hud-name').textContent = s.name;
 }
+const hudBar = $('#hud-bar'), hudLine = $('#hud-line'), hudPct = $('#hud-pct');
+let scrollQueued = false;
 function onScroll(){
+  scrollQueued = false;
   const max = document.documentElement.scrollHeight - innerHeight;
-  const p = max > 0 ? Math.min(1, scrollY / max) : 1;
-  $('#hud-bar').style.transform = $('#hud-line').style.transform = `scaleX(${p})`;
-  $('#hud-pct').textContent = Math.round(p * 100) + '%';
-  if (p > .995) unlock('full');
-  const mid = innerHeight * .45;
+  const line = scrollY + innerHeight * .45;
   let s = STAGES[0];
-  for (const st of STAGES) if (st.el.getBoundingClientRect().top < mid) s = st;
+  for (const st of STAGES) if (st.el.offsetTop < line) s = st;
+  const p = max > 0 ? Math.min(1, scrollY / max) : 1;
+  hudBar.style.transform = hudLine.style.transform = `scaleX(${p})`;
+  hudPct.textContent = Math.round(p * 100) + '%';
+  if (p > .995) unlock('full');
   setStage(s);
 }
-addEventListener('scroll', onScroll, {passive:true});
+addEventListener('scroll', () => { if (!scrollQueued){ scrollQueued = true; requestAnimationFrame(onScroll); } }, {passive:true});
 onScroll();
 
 /* ---------- paleta de comandos ---------- */
@@ -761,8 +770,14 @@ function renderCmd(){
     out += `<li role="option" id="opt-${i}" data-i="${i}" aria-selected="${i === sel}"${it.color ? ` style="--c:${it.color}"` : ''}><i></i>${it.label}<small>${it.hint}</small></li>`;
   });
   list.innerHTML = out || '<li class="empty" role="presentation">Nada encontrado. Tente “guincho” ou “saúde”.</li>';
-  if (shown.length) q.setAttribute('aria-activedescendant', `opt-${sel}`); else q.removeAttribute('aria-activedescendant');
-  const cur = list.querySelector('[aria-selected=true]'); if (cur) cur.scrollIntoView({block:'nearest'});
+  select(sel, true);
+}
+function select(i, scroll){
+  sel = i;
+  list.querySelectorAll('[role=option]').forEach(o => o.setAttribute('aria-selected', String(+o.dataset.i === sel)));
+  if (!shown.length){ q.removeAttribute('aria-activedescendant'); return; }
+  q.setAttribute('aria-activedescendant', `opt-${sel}`);
+  if (scroll) document.getElementById(`opt-${sel}`).scrollIntoView({block:'nearest'});
 }
 function openCmd(){
   if (!cmd.hidden) return;
@@ -775,20 +790,21 @@ function closeCmd(){ cmd.hidden = true; if (cmdFocus && cmdFocus.focus) cmdFocus
 function runCmd(i){ const it = shown[i]; if (!it) return; closeCmd(); it.run(); }
 q.addEventListener('input', () => { sel = 0; renderCmd(); });
 q.addEventListener('keydown', e => {
-  if (e.key === 'ArrowDown'){ e.preventDefault(); sel = (sel + 1) % Math.max(1, shown.length); renderCmd(); }
-  else if (e.key === 'ArrowUp'){ e.preventDefault(); sel = (sel - 1 + shown.length) % Math.max(1, shown.length); renderCmd(); }
+  if (e.key === 'ArrowDown'){ e.preventDefault(); if (shown.length) select((sel + 1) % shown.length, true); }
+  else if (e.key === 'ArrowUp'){ e.preventDefault(); if (shown.length) select((sel - 1 + shown.length) % shown.length, true); }
   else if (e.key === 'Enter'){ e.preventDefault(); runCmd(sel); }
   else if (e.key === 'Tab'){ e.preventDefault(); }
 });
 list.addEventListener('click', e => { const o = e.target.closest('[role=option]'); if (o) runCmd(+o.dataset.i); });
-list.addEventListener('mousemove', e => { const o = e.target.closest('[role=option]'); if (o && +o.dataset.i !== sel){ sel = +o.dataset.i; renderCmd(); } });
+list.addEventListener('mousemove', e => { const o = e.target.closest('[role=option]'); if (o && +o.dataset.i !== sel) select(+o.dataset.i, false); });
 cmd.addEventListener('click', e => { if (e.target === cmd) closeCmd(); });
 $('#hud-cmd').onclick = openCmd;
 
 /* ---------- teclado: atalhos, Esc e Konami ---------- */
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let kpos = 0;
+let keys = [];
 addEventListener('keydown', e => {
+  if (html.classList.contains('boot')) return;   // o boot tem o próprio handler (pular)
   const typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); cmd.hidden ? openCmd() : closeCmd(); return; }
   if (e.key === '/' && !typing && cmd.hidden){ e.preventDefault(); openCmd(); return; }
@@ -800,8 +816,8 @@ addEventListener('keydown', e => {
   }
   if (typing) return;
   const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-  kpos = key === KONAMI[kpos] ? kpos + 1 : (key === KONAMI[0] ? 1 : 0);
-  if (kpos === KONAMI.length){ kpos = 0; warp(); }
+  keys = [...keys, key].slice(-KONAMI.length);
+  if (keys.join() === KONAMI.join()){ keys = []; warp(); }
 });
 
 /* ---------- animações (GSAP) ---------- */
@@ -862,7 +878,7 @@ if (!animate){
     let done = false;
     const line = h => { log.insertAdjacentHTML('beforeend', h + '\n'); log.scrollTop = log.scrollHeight; };
     const finish = () => {
-      if (done) return; done = true; tl.kill(); off();
+      if (done) return; done = true; tl.kill(); barTween.kill(); off();
       try { sessionStorage.setItem('lp-booted', '1'); } catch(e){}
       gsap.timeline({onComplete: () => { html.classList.remove('boot'); gsap.set('#boot', {clearProps:'all'}); scrollTo(0, 0); resolve(); }})
         .to(bar, {scaleX:1, duration:.2}).call(() => pct.textContent = '100%', null, '<')
@@ -885,22 +901,25 @@ if (!animate){
     tl.call(() => line(`\n<span class="t-ok">✓</span> constelação mapeada: <span class="t-a">5 grupos · 16 estrelas</span>`), null, '+=.12')
       .call(() => line(`<span class="t-ok">✓ build concluído em 2.41s</span>`), null, '+=.15')
       .to({}, {duration:.35});
-    gsap.fromTo(bar, {scaleX:0}, {scaleX:.97, duration:tl.duration(), ease:'none', onUpdate(){ pct.textContent = Math.round(this.progress() * 97) + '%'; }});
+    const barTween = gsap.fromTo(bar, {scaleX:0}, {scaleX:.97, duration:tl.duration(), ease:'none', onUpdate(){ pct.textContent = Math.round(this.progress() * 97) + '%'; }});
     const skip = e => { if (e.type === 'click' || e.key === 'Escape' || e.key === 'Enter' || e.key === ' '){ e.preventDefault(); finish(); } };
     const off = () => { $('#boot').removeEventListener('click', skip); removeEventListener('keydown', skip, true); };
     $('#boot').addEventListener('click', skip);
     addEventListener('keydown', skip, true);
   });
 
-  (booting ? boot() : Promise.resolve()).then(() => document.fonts.ready).then(() => { intro(); ScrollTrigger.refresh(); });
+  (booting ? boot() : Promise.resolve()).then(() => document.fonts.ready).catch(() => {}).then(() => {
+    intro(); ScrollTrigger.refresh();
+    restoreScroll();   // depois do refresh: o ScrollTrigger reaplica o valor que encontrou ao carregar
+  });
 
   // seções: tag embaralhada + título subindo palavra por palavra
   document.querySelectorAll('[data-scramble]').forEach(el => {
     const text = el.innerHTML;
     const plain = el.textContent;
-    gsap.set(el, {autoAlpha:0});
+    gsap.set(el, {opacity:0});
     ScrollTrigger.create({trigger:el, start:'top 88%', once:true, onEnter: () => {
-      gsap.set(el, {autoAlpha:1});
+      gsap.set(el, {opacity:1});
       gsap.to(el, {duration:.8, scrambleText:{text:plain, chars:'01/<>_', speed:.5}, onComplete: () => el.innerHTML = text});
     }});
   });
@@ -911,18 +930,18 @@ if (!animate){
     });
   });
   gsap.utils.toArray('.sub, .about p:not(.tag), .quote').forEach(el =>
-    gsap.from(el, {y:24, autoAlpha:0, duration:.8, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 90%', once:true}}));
-  gsap.from('.filters button', {y:12, autoAlpha:0, stagger:.04, duration:.5, ease:'power2.out', scrollTrigger:{trigger:'.filters', start:'top 90%', once:true}});
+    gsap.from(el, {y:24, opacity:0, duration:.8, ease:'power3.out', scrollTrigger:{trigger:el, start:'top 90%', once:true}}));
+  gsap.from('.filters button', {y:12, opacity:0, stagger:.04, duration:.5, ease:'power2.out', scrollTrigger:{trigger:'.filters', start:'top 90%', once:true}});
 
   // linhas do catálogo "compilam" ao entrar na tela
-  gsap.set('.catalog button > span', {autoAlpha:0});
+  gsap.set('.catalog button > span', {opacity:0});
   ScrollTrigger.batch('.catalog li', {start:'top 92%', once:true, onEnter: rows => rows.forEach((li, i) => gsap.delayedCall(i * .07, () => buildRow(li)))});
 
   // editor de código digitando linha a linha
   const lns = gsap.utils.toArray('#code .ln');
   gsap.set(lns, {clipPath:'inset(0 100% 0 0)'});
   const typeTl = gsap.timeline({scrollTrigger:{trigger:'#code', start:'top 78%', once:true}});
-  typeTl.from('#code', {y:40, autoAlpha:0, duration:.7, ease:'power3.out'});
+  typeTl.from('#code', {y:40, opacity:0, duration:.7, ease:'power3.out'});
   lns.forEach(ln => {
     const n = Math.max(1, ln.textContent.length);
     typeTl.to(ln, {clipPath:'inset(0 0% 0 0)', duration:Math.min(.6, n * .016), ease:`steps(${n})`}, '>-.02');
@@ -936,11 +955,13 @@ if (!animate){
       onUpdate: () => el.textContent = Math.round(o.v) + suf});
   });
 
-  gsap.from('.links a', {y:30, autoAlpha:0, stagger:.1, duration:.7, ease:'power3.out', scrollTrigger:{trigger:'.links', start:'top 92%', once:true}});
+  gsap.from('.links a', {y:30, opacity:0, stagger:.1, duration:.7, ease:'power3.out', scrollTrigger:{trigger:'.links', start:'top 92%', once:true}});
 
   // parallax leve no texto do herói ao rolar
   gsap.to('.hero-text', {yPercent:-30, autoAlpha:.2, ease:'none', scrollTrigger:{trigger:'.sky', start:'top top', end:'bottom top', scrub:true}});
 }
+// o script chegou ao fim: a rede de segurança do <head> não é mais necessária
+clearTimeout(window.lpSafety);
 </script>
 </body>
 </html>
