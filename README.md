@@ -12,4 +12,4 @@ Portfólio de Leonel Paiva: uma constelação interativa com os sites que desenv
 - Easter egg: ↑↑↓↓←→←→BA.
 - HTML, CSS e JavaScript em um único arquivo, com [GSAP](https://gsap.com) (ScrollTrigger, SplitText, ScrambleText) via CDN. Sem GSAP o site continua funcionando, só sem animação. Respeita `prefers-reduced-motion`.
 
-> O site da TG Geradores que ficava aqui foi movido para [tg-geradores](https://github.com/AknoLeonel/tg-geradores).
+
